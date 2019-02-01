@@ -6,7 +6,7 @@ ActiveRecord::Base.send(:include, Sorted::ActiveRecord::Helper)
 
 describe Sorted::ActiveRecord do
   class Post < ActiveRecord::Base
-    establish_connection adapter: 'sqlite3', database: ':memory:'
+    establish_connection adapter: 'postgresql', database: ':memory:'
 
     connection.create_table table_name, force: true do |t|
       t.string :name
@@ -18,7 +18,7 @@ describe Sorted::ActiveRecord do
   end
 
   class User < ActiveRecord::Base
-    establish_connection adapter: 'sqlite3', database: ':memory:'
+    establish_connection adapter: 'postgresql', database: ':memory:'
 
     connection.create_table table_name, force: true do |t|
       t.string :name
@@ -79,9 +79,21 @@ describe Sorted::ActiveRecord do
     expect(actual).to match(expected)
   end
 
+  it 'should allow sql nulls first/last sorting' do
+    expected = subject.order('orders_count ASC NULLS FIRST, created_at DESC NULLS LAST').to_sql
+    actual = subject.sorted(order: 'orders_count ASC NULLS FIRST, created_at DESC NULLS LAST').to_sql
+    expect(actual).to match(expected)
+  end
+
   it 'should allow uri' do
     expected = subject.order(orders_count: :asc, created_at: :desc).to_sql
     actual = subject.sorted(sort: 'orders_count_asc!created_at_desc').to_sql
+    expect(actual).to match(expected)
+  end
+
+  it 'should allow uri nulls first/last sorting' do
+    expected = subject.order('orders_count ASC NULLS FIRST, created_at DESC NULLS LAST').to_sql
+    actual = subject.sorted(sort: 'orders_count_asc_nulls_first!created_at_desc_nulls_last').to_sql
     expect(actual).to match(expected)
   end
 

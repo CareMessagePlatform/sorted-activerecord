@@ -72,7 +72,14 @@ module Sorted
       end
 
       def to_sql
-        @return_hash ? to_hash : ::Sorted::SQLQuery.encode(@set)
+        # Use string in case one of values is nulls first/last
+        @return_hash && no_nulls_ordering? ? to_hash : ::Sorted::SQLQuery.encode(@set)
+      end
+
+      private
+
+      def no_nulls_ordering?
+        @set.map(&:last).grep(/nulls_/).empty?
       end
     end
   end

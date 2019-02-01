@@ -20,7 +20,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'activerecord', '>= 4.0.0'
   spec.add_dependency 'activesupport'
-  spec.add_dependency 'sorted', '~> 2.1.2'
+  # Using sorted version at https://github.com/CareMessagePlatform/sorted
+  # spec.add_dependency 'sorted'
 
   spec.add_development_dependency 'bundler', '~> 1.7'
   spec.add_development_dependency 'rake', '~> 10.0'
@@ -28,5 +29,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'guard-rspec'
-  spec.add_development_dependency 'sqlite3', '>= 1.3.5'
+  spec.add_development_dependency 'pg', '>= 0.18.3'
 end
